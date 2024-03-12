@@ -47,3 +47,24 @@ Overall, this platform offers a comprehensive solution to the challenges faced i
 - **Day 3**: Backend Server enhancement (Developing basic CRUD operations)
 - **Day 4**: Database Setup (Setting up MongoDB and connecting it with Express App)
 - **Day 5**: Figma Design (Starting with basic Figma Design for Front-End Application)
+
+## Tech Stack
+
+This project is based on MERN Stack
+
+•⁠  ⁠*Frontend:* React.js
+•⁠  ⁠*Backend:* Node.js, Express.js
+•⁠  ⁠*Database:* MongoDB
+•⁠  ⁠*Deployment:* Vercel (Frontend & Backend)
+
+
+## Running the project locally
+
+•⁠  ⁠Clone the repository -  ⁠ git clone https://github.com/kalviumcommunity/S54_Pranshu_Capstone_MedEase.git
+
+•⁠  ⁠Install dependencies - ⁠ npm install ⁠ (for both frontend and backend)
+•⁠  ⁠Start the application - ⁠ npm run dev ⁠
+
+## Reach out to me
+
+Have questions or suggestions? Contact us at [pranshumac19@gmail.com](mailto:pranshumac19@gmail.com).
