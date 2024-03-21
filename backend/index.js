@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors")
 const mongoose = require('mongoose');
+const userRouter = require("./routes/userRoutes");
 
 
 require('dotenv').config();
@@ -23,6 +24,10 @@ app.use(express.json())
 app.get("/",(req,res)=>{
     res.send("Welcome to the server!!!")
 })
+
+
+
+app.use("/users",userRouter)
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
