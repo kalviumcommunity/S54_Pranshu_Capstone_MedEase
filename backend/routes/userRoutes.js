@@ -6,7 +6,7 @@ const userRouter = express.Router();
 var jwt = require("jsonwebtoken");
 const { userValidation } = require("../utils/validation");
 const ExpressError = require("../utils/ExpressError.js");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 
 userRouter.use(express.json());
 
