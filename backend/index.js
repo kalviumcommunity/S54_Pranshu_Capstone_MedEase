@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors")
 const mongoose = require('mongoose');
-const userRouter = require("./routes/userRoutes");
+const patientRouter = require("./routes/patientRoutes");
 
 
 require('dotenv').config();
@@ -27,7 +27,7 @@ app.get("/",(req,res)=>{
 
 
 
-app.use("/users",userRouter)
+app.use("/patients",patientRouter)
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
