@@ -11,3 +11,13 @@ exports.userValidation = Joi.object({
     phone: Joi.number().integer().min(1111111111).max(9999999999).required(),
   }).required(),
 });
+
+
+exports.appointmentValidation = Joi.object({
+  name:Joi.string().required(),
+  age:Joi.number().required(),
+  weight:Joi.number(),
+  issue:Joi.string().required(),
+  preMedication:Joi.string()
+
+});
