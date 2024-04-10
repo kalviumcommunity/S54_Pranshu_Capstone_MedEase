@@ -54,3 +54,15 @@ exports.doctorValidation = Joi.object({
   }).required(),
 });
 
+exports.hospitalValidation = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string()
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
+    .required(),
+  contact: Joi.object({
+    email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+      .required(),
+    phone: Joi.number().integer().min(1111111111).max(9999999999).required(),
+  }).required(),
+});
