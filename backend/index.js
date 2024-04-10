@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const patientRouter = require("./routes/patientRoutes");
 const receptionRouter = require("./routes/receptionRoutes");
 const doctorRouter = require("./routes/doctorRoutes");
+const hospitalRouter = require("./routes/hospitalRoutes");
 
 
 require('dotenv').config();
@@ -32,6 +33,8 @@ app.get("/",(req,res)=>{
 app.use("/patients",patientRouter)
 app.use("/receptions",receptionRouter)
 app.use("/doctors",doctorRouter)
+app.use("/hospitals",hospitalRouter)
+
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
