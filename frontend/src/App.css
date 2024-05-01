@@ -1,42 +1,276 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@font-face {
+  font-family: "Franklin Gothic Medium";
+  src: url("./assets/Franklin Gothic Medium Regular.ttf");
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  min-height: 100vh;
+  width: 100%;
+  
+}
+.login {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2vmax 3vmax 3vmax 3vmax;
+}
+.profile {
+  display: flex;
+  gap: 2vmin;
+}
+.name {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.greeting {
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Open Sans";
+  font-size: 0.8vmax;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.username {
+  color: #000;
+  font-family: "Open Sans";
+  font-size: 1.25vmax;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.dp {
+  width: 2.431vmax;
+  height: 2.431vmax;
+  border-radius: 50%;
+  cursor: pointer;
+  /* background: url("https://img.freepik.com/premium-photo/smart-handsome-man_995105-1856.jpg?w=360") lightgray 50% / cover no-repeat;
+  background-size: 100% 100%; */
+}
+.dp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 35px;
+}
+.body {
+  display: flex;
+  flex: 1;
+
+
+}
+.content {
+  padding: 0 2vmax;
+  /* overflow-x: hidden; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3vmax;
+}
+.side-navbar {
+  padding: 4vmax 5vmax 0 3vmax;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5vmax;
+}
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vmin;
+}
+.dash-text {
+  font-family: "Franklin Gothic Medium";
+  font-size: 1vmax;
+  color: #1479ff;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.calender {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vmin;
+}
+.calender-text {
+  font-family: "Franklin Gothic Medium";
+  font-size: 1vmax;
+  color: rgba(8, 13, 38, 0.65);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vmin;
+}
+.history-text {
+  font-family: "Franklin Gothic Medium";
+  font-size: 1vmax;
+  color: rgba(8, 13, 38, 0.65);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.profile-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vmin;
+}
+.profile-text {
+  font-family: "Franklin Gothic Medium";
+  font-size: 1vmax;
+  color: rgba(8, 13, 38, 0.65);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.showImg-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+}
+.showImg-text span {
+  color: #fff;
+  font-family: "Open Sans";
+  font-size: 3.125vmax;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.25vmax;
+}
+.token-img {
+  position: relative;
   text-align: center;
 }
+.token-abs {
+  position: absolute;
+  top: 28%;
+  left: 33%;
+}
+.your {
+  color: #1479ff;
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+  font-family: "Open Sans";
+  font-size: 0.833vmax;
+  font-size: 1vmax;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.067vmax;
+  text-align: center;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.token-no {
+  color: #1479ff;
+  font-family: "Open Sans";
+  font-size: 4.375vmax;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.35vmax;
+  text-align: center;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.doctors {
+  color: #000;
+  font-family: "Open Sans";
+  font-size: 2.222vmax;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -0.067vmax;
 }
+.nearest-doc {
+  color: #7f7f7f;
+  font-family: "Open Sans";
+  font-size: 1vmax;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.all-top-docs{
+  display: flex;
+  gap: 1.5vmax;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
+  padding: 1.5vmax 0.5vmax;
+  
 
-.card {
-  padding: 2em;
-}
+  overflow-x: scroll;
+  overflow-y: hidden;
 
-.read-the-docs {
-  color: #888;
+  width: 100%;
+
+
+}
+.all-top-docs::-webkit-scrollbar{
+  display: none;
+}
+.view-all-doc {
+  display: inline-flex;
+  padding: 0.208vmax 0.972vmax;
+  justify-content: center;
+  align-items: center;
+  gap: 0.694vmax;
+  border-radius: 20px;
+  background: #ebf4ff;
+  color: #1479ff;
+  cursor: pointer;
+}
+.all-doctors {
+  display: flex;
+  flex-shrink: 0; 
+  width: 38.194vmax;
+  height: 15.988vmax;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+
+  
+}
+.doc-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vmax;
+}
+.doc-name {
+  color: #000;
+  font-family: "Open Sans";
+  font-size: 1.806vmax;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.doc-category {
+  color: #7f7f7f;
+  font-family: "Open Sans";
+  font-size: 0.794vmax;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.doc-description {
+  color: #7f7f7f;
+  font-family: "Open Sans";
+  font-size: 0.833vmax;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  /* overflow-y: scroll; */
 }
