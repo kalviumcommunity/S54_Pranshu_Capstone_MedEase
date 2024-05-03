@@ -22,6 +22,11 @@ const validateUser = (req, res, next) => {
   }
 };
 
+doctorRouter.get("/",wrapAsync(async(req,res)=>{
+  let data = await Doctor.find()
+  res.send(data);
+}))
+
 doctorRouter.post(
   "/signup",
   validateUser,
