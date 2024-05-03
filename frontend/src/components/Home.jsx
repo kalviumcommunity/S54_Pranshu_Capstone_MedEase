@@ -22,39 +22,14 @@ import token from "../assets/images/token.png";
 import doc2 from "../assets/images/doc2.png";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { SideNavbar } from "./SideNavbar";
+import { Link, useNavigate } from "react-router-dom";
+import TopNavbar from "./TopNavbar";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <div className="container">
-      <div className="login">
-        <div className="profile">
-          <div className="name">
-            <div className="greeting">Hi, Welcome Back</div>
-            <div className="username">Rikhil Taneja</div>
-          </div>
-          <Menu>
-            <MenuButton>
-              <Wrap>
-                <WrapItem>
-                  <Avatar name="Rikhil Taneja" src="" />
-                </WrapItem>
-              </Wrap>
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Patient</MenuItem>
-              <MenuItem>Doctor</MenuItem>
-              <MenuItem>Hospital</MenuItem>
-            </MenuList>
-          </Menu>
-
-          {/* <div className="dp">
-            <img
-              src="https://avatars.githubusercontent.com/u/142862928?v=4"
-              alt=""
-            />
-          </div> */}
-        </div>
-      </div>
+      <TopNavbar/>
       <div className="body">
         <SideNavbar />
         <div className="content">

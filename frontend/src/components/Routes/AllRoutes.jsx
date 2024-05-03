@@ -1,14 +1,28 @@
 import React from 'react'
 import { Route, Routes } from "react-router-dom";
 import Home from '../Home';
-import Test from '../Test';
+
+
+
+import PatientLogin from '../PatientLogin';
+import DoctorLogin from '../DoctorLogin';
+import HospitalLogin from '../HospitalLogin';
+import PatientSignup from '../PatientSignup';
+import DoctorSignup from '../DoctorSignup';
+import HospitalSignup from '../HospitalSignup';
 
 const AllRoutes = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/test' element={<Test/>}/>
+        <Route path='/patient/signup' element={<PatientSignup/>}/>
+        <Route path='/patient/login' element={<PatientLogin/>} />
+        <Route path='/doctor/signup' element={<DoctorSignup/>} />
+        <Route path='/doctor/login' element={<DoctorLogin/>} />
+        <Route path='/hospital/signup' element={<HospitalSignup/>} />
+        <Route path='/hospital/login' element={<HospitalLogin/>} />
+
       </Routes>
     </div>
   )
