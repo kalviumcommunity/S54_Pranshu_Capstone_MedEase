@@ -22,6 +22,18 @@ const validateUser = (req, res, next) => {
   }
 };
 
+doctorRouter.get(
+  "/",
+  wrapAsync(async (req, res) => {
+    let data = await Doctor.find();
+    if (data.length != 0) {
+      res.send(data);
+    } else {
+      throw new ExpressError(500, "No data");
+    }
+  })
+);
+
 doctorRouter.post(
   "/signup",
   validateUser,

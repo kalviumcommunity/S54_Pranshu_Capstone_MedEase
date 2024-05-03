@@ -274,3 +274,60 @@
   line-height: normal;
   /* overflow-y: scroll; */
 }
+.form-parent {
+  flex: 1;
+  padding: 0vmax 0vmin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+
+
+
+  /* background-color: aliceblue; */
+  /* color: rgb(198, 232, 255); */
+}
+.form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35vmax;
+  padding: 2vmin;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+
+  gap: 2vmin;
+}
+.err{
+  color: red;
+  font-size: 1.5vmin;
+  margin-top: 0.5qvmin;
+}
+.patient-login-container{
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  min-height: 100vh;
+  width: 100%;
+
+}
+.patient-login-body{
+  flex: 1;
+  display: flex;
+ 
+}
+.fff{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.dd{
+  position: relative;
+}
+.tttt{
+  position: absolute;
+  top: 50%;
+}

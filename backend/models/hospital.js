@@ -7,6 +7,7 @@ const hospitalSchema = new mongoose.Schema({
   contact:{
     email: {
       type: String,
+      unique:true,
       required: true
     },
     phone: {
