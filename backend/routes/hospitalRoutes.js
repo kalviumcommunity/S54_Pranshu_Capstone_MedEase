@@ -4,7 +4,11 @@ const User = require("../models/user.js");
 const app = express();
 const hospitalRouter = express.Router();
 var jwt = require("jsonwebtoken");
-const { userValidation, doctorValidation, hospitalValidation } = require("../utils/validation.js");
+const {
+  userValidation,
+  doctorValidation,
+  hospitalValidation,
+} = require("../utils/validation.js");
 const ExpressError = require("../utils/ExpressError.js");
 const passwordHash = require("password-hash");
 const Doctor = require("../models/doctor.js");
@@ -22,11 +26,17 @@ const validateUser = (req, res, next) => {
   }
 };
 
-hospitalRouter.get("/",wrapAsync(async(req,res)=>{
-  let data = await Hospital.find()
-  res.send(data);
-
-}))
+hospitalRouter.get(
+  "/",
+  wrapAsync(async (req, res) => {
+    let data = await Hospital.find();
+    if (data.length != 0) {
+      res.send(data);
+    } else {
+      throw new ExpressError(500, "No data");
+    }
+  })
+);
 
 hospitalRouter.post(
   "/signup",
@@ -39,7 +49,9 @@ hospitalRouter.post(
       password: hashedPassword,
       contact: req.body.contact,
     });
-    let findUser = await Hospital.find({ "contact.email": req.body.contact.email });
+    let findUser = await Hospital.find({
+      "contact.email": req.body.contact.email,
+    });
     if (findUser.length == 0) {
       await newUserData.save();
       let token = jwt.sign(

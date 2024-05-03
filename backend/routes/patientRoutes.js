@@ -9,7 +9,6 @@ const ExpressError = require("../utils/ExpressError.js");
 const passwordHash = require("password-hash");
 require("dotenv").config();
 
-
 patientRouter.use(express.json());
 
 const validateUser = (req, res, next) => {
@@ -21,10 +20,17 @@ const validateUser = (req, res, next) => {
   }
 };
 
-patientRouter.get("/",wrapAsync(async(req,res)=>{
-  let data = await User.find()
-  res.send(data);
-}))
+patientRouter.get(
+  "/",
+  wrapAsync(async (req, res) => {
+    let data = await User.find();
+    if (data.length != 0) {
+      res.send(data);
+    } else {
+      throw new ExpressError(500, "No data");
+    }
+  })
+);
 
 patientRouter.post(
   "/signup",
