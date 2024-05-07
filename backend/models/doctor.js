@@ -8,6 +8,8 @@ const doctorSchema = new mongoose.Schema({
   degree: { type: String, required: true },
   hospital: { type: mongoose.Schema.Types.ObjectId,ref:"Hospital", required: true },
   speciality: { type: String, required: true },
+  bio:{ type: String, required: true },
+  image:{ type: String, required: true },
   contact: {
     email: {
       type: String,

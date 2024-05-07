@@ -1,5 +1,5 @@
-import { Box, HStack, Image, Select } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Box, HStack, Image, InputGroup, InputRightElement, Select, useToast } from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from "react";
 import patientlogin from "../assets/images/patient-login.jpg";
 
 import { useForm } from "react-hook-form";
@@ -9,8 +9,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { SideNavbar } from "./SideNavbar";
 import TopNavbar from "./TopNavbar";
+import { loginCheck, typeCheck } from "../utils/loginCheck";
+import { setCookie } from "../utils/cookie";
+import { AppContext } from "./Context";
 
 export default function HospitalLogin() {
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
+  const {setLogin,setUserType} = useContext(AppContext)
   const navigate = useNavigate();
   const [hospital, seHospitals] = useState([]);
   const {
@@ -32,18 +38,66 @@ export default function HospitalLogin() {
         console.log(err);
       });
   }, []);
-
+  const toast = useToast();
+  const toastIdRef = React.useRef();
   const FormSubmitHandler = (data) => {
-    axios
-      .post("http://localhost:6969/hospitals/signin", data)
-      .then((res) => {
-        console.log(res.data);
-        console.log("ADDED");
-        navigate("");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    toastIdRef.current = toast({
+      title: `Signing Up`,
+      status: "loading",
+      isClosable: false,
+    });
+    setTimeout(() => {
+      axios
+        .post("http://localhost:6969/hospitals/signin", data)
+        .then((res) => {
+          setCookie("type","Hospital",10)
+          setCookie("auth-token", res.data, 10);
+          setCookie("email", data.email, 10);
+          setLogin(loginCheck())
+          setUserType(typeCheck())
+          toast.update(toastIdRef.current, {
+            title: `Signed Up`,
+            status: "success",
+            isClosable: false,
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            if (err.response.status == 404) {
+              toast.update(toastIdRef.current, {
+                title: `Email not found`,
+                status: "error",
+                isClosable: false,
+              });
+            }  
+            else if(err.response.status == 401){
+              toast.update(toastIdRef.current, {
+                title: `Wrong Password`,
+                status: "error",
+                isClosable: false,
+              });
+            }
+            else {
+              toast.update(toastIdRef.current, {
+                title: `Server Error! Contact Admin`,
+                status: "error",
+                isClosable: false,
+              });
+            }
+          } else {
+            toast.update(toastIdRef.current, {
+              title: `Server Error! Contact Admin`,
+              status: "error",
+              isClosable: false,
+            });
+          }
+        });
+      
+    }, 1200);
   };
   return (
     <div className="patient-login-container">
@@ -64,6 +118,7 @@ export default function HospitalLogin() {
                     Email
                   </FormLabel>
                   <Input
+                  placeholder="Enter email"
                     type="email"
                     borderColor="black"
                     {...register("email", {
@@ -76,22 +131,30 @@ export default function HospitalLogin() {
                 <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
                   Password
                 </FormLabel>
-                <Input
-                  type="password"
-                  borderColor="black"
-                  {...register("password", {
-                    required: "Password Required",
-                    minLength: {
-                      value: 8,
-                      message: "Minimum 8 characters required",
-                    },
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
-                      message:
-                        "Password Not Valid (Use Special Characters & Numbers)",
-                    },
-                  })}
-                />
+                <InputGroup>
+                  <Input
+                    type={show ? "text" : "password"}
+                    borderColor="black"
+                    placeholder="Enter password"
+                    {...register("password", {
+                      required: "Password Required",
+                      minLength: {
+                        value: 8,
+                        message: "Minimum 8 characters required",
+                      },
+                      pattern: {
+                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                        message:
+                          "Password Not Valid (Use Special Characters & Numbers)",
+                      },
+                    })}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <p className="err">{errors.password?.message}</p>
               </FormControl>
               <Button type="submit" colorScheme="blue">

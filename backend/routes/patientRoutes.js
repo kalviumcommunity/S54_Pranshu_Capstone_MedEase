@@ -32,6 +32,19 @@ patientRouter.get(
   })
 );
 
+patientRouter.get(
+  "/:username",
+  wrapAsync(async (req, res) => {
+    let { username } = req.params;
+
+    let result = await User.find({ username: username });
+
+    if (result.length == 0) {
+      res.status(404).json("User Not found!");
+    }
+    res.send(result[0]);
+  })
+);
 patientRouter.post(
   "/signup",
   validateUser,

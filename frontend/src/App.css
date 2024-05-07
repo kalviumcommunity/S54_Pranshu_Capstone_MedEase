@@ -31,6 +31,7 @@
   justify-content: flex-end;
 }
 .greeting {
+  text-align: end;
   color: rgba(0, 0, 0, 0.5);
   font-family: "Open Sans";
   font-size: 0.8vmax;
@@ -39,6 +40,7 @@
   line-height: normal;
 }
 .username {
+  text-align: end;
   color: #000;
   font-family: "Open Sans";
   font-size: 1.25vmax;

@@ -1,5 +1,14 @@
-import { Box, HStack, Image, Select } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import {
+  Box,
+  HStack,
+  Image,
+  InputGroup,
+  InputRightElement,
+  Select,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from "react";
 import patientlogin from "../assets/images/patient-login.jpg";
 
 import { useForm } from "react-hook-form";
@@ -9,8 +18,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { SideNavbar } from "./SideNavbar";
 import TopNavbar from "./TopNavbar";
+import { AppContext } from "./Context";
+import { setCookie } from "../utils/cookie";
+import { loginCheck, typeCheck } from "../utils/loginCheck";
 
 export default function DoctorSignup() {
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
   const navigate = useNavigate();
   const [hospital, seHospitals] = useState([]);
   const {
@@ -21,6 +35,7 @@ export default function DoctorSignup() {
     formState: { errors },
   } = useForm();
   // console.log(watch())
+  const { setLogin, setUserType } = useContext(AppContext);
 
   useEffect(() => {
     axios
@@ -32,18 +47,64 @@ export default function DoctorSignup() {
         console.log(err);
       });
   }, []);
-
+  const toast = useToast();
+  const toastIdRef = React.useRef();
   const FormSubmitHandler = (data) => {
-    axios
-      .post("http://localhost:6969/doctors/signup", data)
-      .then((res) => {
-        console.log(res.data);
-        console.log("ADDED");
-        navigate("");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    toastIdRef.current = toast({
+      title: `Signing Up`,
+      status: "loading",
+      isClosable: false,
+    });
+
+    setTimeout(() => {
+      axios
+        .post("http://localhost:6969/doctors/signup", data)
+        .then((res) => {
+          setCookie("type", "Doctor", 10);
+          setCookie("auth-token", res.data, 10);
+          setCookie("username", data.username, 10);
+          setLogin(loginCheck());
+          setUserType(typeCheck());
+          toast.update(toastIdRef.current, {
+            title: `Signed Up`,
+            status: "success",
+            isClosable: false,
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            if (err.response.status == 400) {
+              toast.update(toastIdRef.current, {
+                title: `Username Exists`,
+                status: "error",
+                isClosable: false,
+              });
+            } else if (err.response.status == 404) {
+              toast.update(toastIdRef.current, {
+                title: `Hospital not found`,
+                status: "error",
+                isClosable: false,
+              });
+            } else {
+              toast.update(toastIdRef.current, {
+                title: `Server Error! Contact Admin`,
+                status: "error",
+                isClosable: false,
+              });
+            }
+          } else {
+            toast.update(toastIdRef.current, {
+              title: `Server Error! Contact Admin`,
+              status: "error",
+              isClosable: false,
+            });
+          }
+        });
+    }, 1200);
   };
   return (
     <div className="patient-login-container">
@@ -64,10 +125,11 @@ export default function DoctorSignup() {
                   Name
                 </FormLabel>
                 <Input
+                  placeholder="Enter your full name"
                   type="text"
                   borderColor="black"
                   {...register("name", {
-                    required: "name is required",
+                    required: "Name is required",
                   })}
                 />
                 <p className="err">{errors.name?.message}</p>
@@ -77,34 +139,43 @@ export default function DoctorSignup() {
                   Username
                 </FormLabel>
                 <Input
+                  placeholder="Enter username"
                   type="text"
                   borderColor="black"
                   {...register("username", {
                     required: "Username is required",
                   })}
                 />
-                <p className="err">{errors.user?.message}</p>
+                <p className="err">{errors.username?.message}</p>
               </FormControl>
               <FormControl>
                 <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
                   Password
                 </FormLabel>
-                <Input
-                  type="password"
-                  borderColor="black"
-                  {...register("password", {
-                    required: "Password Required",
-                    minLength: {
-                      value: 8,
-                      message: "Minimum 8 characters required",
-                    },
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
-                      message:
-                        "Password Not Valid (Use Special Characters & Numbers)",
-                    },
-                  })}
-                />
+                <InputGroup>
+                  <Input
+                    type={show ? "text" : "password"}
+                    borderColor="black"
+                    placeholder="Enter password"
+                    {...register("password", {
+                      required: "Password Required",
+                      minLength: {
+                        value: 8,
+                        message: "Minimum 8 characters required",
+                      },
+                      pattern: {
+                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                        message:
+                          "Password Not Valid (Use Special Characters & Numbers)",
+                      },
+                    })}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <p className="err">{errors.password?.message}</p>
               </FormControl>
               <FormControl>
@@ -112,6 +183,7 @@ export default function DoctorSignup() {
                   Qualifications
                 </FormLabel>
                 <Input
+                  placeholder="for ex:- MBBS"
                   type="text"
                   borderColor="black"
                   {...register("degree", {
@@ -122,22 +194,23 @@ export default function DoctorSignup() {
               </FormControl>
               <FormControl>
                 <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
-                  speciality
+                  Speciality
                 </FormLabel>
                 <Input
+                  placeholder="for ex:- surgeon"
                   type="text"
                   borderColor="black"
                   {...register("speciality", {
-                    required: "speciality is required",
+                    required: "Speciality is required",
                   })}
                 />
                 <p className="err">{errors.speciality?.message}</p>
               </FormControl>
               <FormControl>
                 <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
-                  Hospital 
+                  Hospital
                 </FormLabel>
-                
+
                 <Select
                   placeholder="Select Hospital"
                   borderColor={"black"}
@@ -155,12 +228,41 @@ export default function DoctorSignup() {
                 </Select>
                 <p className="err">{errors.hospital?.message}</p>
               </FormControl>
+              <FormControl>
+                <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
+                  Bio
+                </FormLabel>
+                <Textarea
+                  placeholder="Brief description of yourself"
+                  type="text"
+                  borderColor="black"
+                  {...register("bio", {
+                    required: "Bio is required",
+                  })}
+                />
+                <p className="err">{errors.bio?.message}</p>
+              </FormControl>
+              <FormControl>
+                <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
+                  Profile photo
+                </FormLabel>
+                <Input
+                  placeholder="Enter your profle photo"
+                  type="text"
+                  borderColor="black"
+                  {...register("image", {
+                    required: "Photo is required",
+                  })}
+                />
+                <p className="err">{errors.image?.message}</p>
+              </FormControl>
               <HStack width={"100%"} gap={"1.5vmin"}>
                 <FormControl>
-                  <FormLabel fontSize="1vmax" as="i" fontWeight="550">
+                  <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
                     Phone no.
                   </FormLabel>
                   <Input
+                    placeholder="Enter phone no."
                     type="number"
                     borderColor="black"
                     {...register("contact.phone", {
@@ -178,10 +280,11 @@ export default function DoctorSignup() {
                   <p className="err">{errors.contact?.phone?.message}</p>
                 </FormControl>
                 <FormControl>
-                  <FormLabel fontSize="1vmax" as="i" fontWeight="550">
+                  <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
                     Email
                   </FormLabel>
                   <Input
+                    placeholder="Enter email"
                     type="email"
                     borderColor="black"
                     {...register("contact.email", {

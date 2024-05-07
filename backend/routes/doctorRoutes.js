@@ -34,6 +34,17 @@ doctorRouter.get(
   })
 );
 
+doctorRouter.get(
+  "/:username",
+  wrapAsync(async (req, res) => {
+    let {username} = req.params;
+    let result = await Doctor.find({username:username})
+    if(result.length == 0){
+    res.status(404).json("User Not found!");
+    }
+    res.send(result[0])
+  })
+);
 doctorRouter.post(
   "/signup",
   validateUser,
@@ -49,6 +60,8 @@ doctorRouter.post(
         degree: req.body.degree,
         hospital: findHospital,
         speciality: req.body.speciality,
+        bio:req.body.bio,
+        image:req.body.image,
         contact: req.body.contact,
       });
       let findUser = await Doctor.find({ username: req.body.username });
