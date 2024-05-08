@@ -34,6 +34,17 @@ doctorRouter.get(
   })
 );
 
+doctorRouter.get(
+  "/:email",
+  wrapAsync(async (req, res) => {
+    let { email } = req.params;
+    let result = await Doctor.find({ "contact.email": email });
+    if (result.length == 0) {
+      throw new ExpressError(404, "User Not found!");
+    }
+    res.send(result[0]);
+  })
+);
 doctorRouter.post(
   "/signup",
   validateUser,
@@ -44,21 +55,23 @@ doctorRouter.post(
     if (findHospital != null) {
       let newUserData = new Doctor({
         name: req.body.name,
-        username: req.body.username,
         password: hashedPassword,
         degree: req.body.degree,
         hospital: findHospital,
         speciality: req.body.speciality,
+        bio: req.body.bio,
+        image: req.body.image,
         contact: req.body.contact,
       });
-      let findUser = await Doctor.find({ username: req.body.username });
+      let findUser = await Doctor.find({
+        "contact.email": req.body.contact.email,
+      });
       if (findUser.length == 0) {
         await newUserData.save();
         let token = jwt.sign(
           {
             data: {
               name: req.body.name,
-              username: req.body.username,
               degree: req.body.degree,
               hospital: findHospital,
               speciality: req.body.speciality,
@@ -70,7 +83,7 @@ doctorRouter.post(
         );
         res.send(token);
       } else {
-        throw new ExpressError(400, "Username Exists");
+        throw new ExpressError(400, "Email Exists");
       }
     } else {
       throw new ExpressError(404, "Hospital not found ");
@@ -80,8 +93,10 @@ doctorRouter.post(
 doctorRouter.post(
   "/signin",
   wrapAsync(async (req, res) => {
-    let { username, password } = req.body;
-    let userFind = await Doctor.find({ username: username });
+    let { email, password } = req.body;
+    console.log(email);
+    let userFind = await Doctor.find({ "contact.email": email });
+
     if (userFind.length != 0) {
       let storedPassword = userFind[0].password;
       if (passwordHash.verify(password, storedPassword)) {
@@ -89,7 +104,6 @@ doctorRouter.post(
           {
             data: {
               name: userFind[0].name,
-              username: userFind[0].username,
               degree: userFind[0].degree,
               hospital: userFind[0].hospital,
               speciality: userFind[0].speciality,
@@ -104,7 +118,7 @@ doctorRouter.post(
         throw new ExpressError(401, "Wrong Password!");
       }
     } else {
-      throw new ExpressError(404, "Username not found!");
+      throw new ExpressError(404, "Email not found!");
     }
   })
 );

@@ -37,16 +37,28 @@ hospitalRouter.get(
     }
   })
 );
-
+hospitalRouter.get("/:email",wrapAsync(async(req,res)=>{
+  let {email} = req.params;
+  let result = await Hospital.find({"contact.email":email})
+  if(result.length == 0){
+    throw new ExpressError(404,"Hospital Not found!")
+  }
+  res.send(result[0])
+}))
 hospitalRouter.post(
   "/signup",
   validateUser,
   wrapAsync(async (req, res) => {
-    let { password } = req.body;
+    let { password,specialization } = req.body;
     let hashedPassword = passwordHash.generate(password);
+    let specializationArray = specialization.split(",")
+
     let newUserData = new Hospital({
       name: req.body.name,
       password: hashedPassword,
+      specialization:specializationArray,
+      location:req.body.location,
+      image:req.body.image,
       contact: req.body.contact,
     });
     let findUser = await Hospital.find({
@@ -59,6 +71,7 @@ hospitalRouter.post(
           data: {
             name: req.body.name,
             contact: req.body.contact,
+            location:req.body.location
           },
           type: "Hospital",
         },
@@ -75,7 +88,6 @@ hospitalRouter.post(
   wrapAsync(async (req, res) => {
     let { email, password } = req.body;
     let userFind = await Hospital.find({ "contact.email": email });
-    console.log("userFind: ", userFind);
     if (userFind.length != 0) {
       let storedPassword = userFind[0].password;
       if (passwordHash.verify(password, storedPassword)) {
@@ -84,6 +96,7 @@ hospitalRouter.post(
             data: {
               name: userFind[0].name,
               contact: userFind[0].contact,
+              location:userFind[0].location
             },
             type: "Hospital",
           },

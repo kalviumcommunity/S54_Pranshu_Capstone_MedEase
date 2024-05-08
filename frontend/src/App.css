@@ -14,12 +14,11 @@
   background: #fff;
   min-height: 100vh;
   width: 100%;
-  
 }
 .login {
   display: flex;
   justify-content: flex-end;
-  padding: 2vmax 3vmax 3vmax 3vmax;
+  padding: 2vmax 3vmax 0vmax 3vmax;
 }
 .profile {
   display: flex;
@@ -31,6 +30,7 @@
   justify-content: flex-end;
 }
 .greeting {
+  text-align: end;
   color: rgba(0, 0, 0, 0.5);
   font-family: "Open Sans";
   font-size: 0.8vmax;
@@ -39,6 +39,7 @@
   line-height: normal;
 }
 .username {
+  text-align: end;
   color: #000;
   font-family: "Open Sans";
   font-size: 1.25vmax;
@@ -63,11 +64,9 @@
 .body {
   display: flex;
   flex: 1;
-
-
 }
 .content {
-  padding: 0 2vmax;
+  padding: 3vmax 2vmax 0 5vmax;
   /* overflow-x: hidden; */
   flex: 1;
   display: flex;
@@ -75,7 +74,7 @@
   gap: 3vmax;
 }
 .side-navbar {
-  padding: 4vmax 5vmax 0 3vmax;
+  padding: 8vmax 0vmax 0 3vmax;
   display: flex;
   flex-direction: column;
   gap: 2.5vmax;
@@ -203,22 +202,18 @@
   font-weight: 400;
   line-height: normal;
 }
-.all-top-docs{
+.all-top-docs {
   display: flex;
   gap: 1.5vmax;
 
-
   padding: 1.5vmax 0.5vmax;
-  
 
   overflow-x: scroll;
   overflow-y: hidden;
 
   width: 100%;
-
-
 }
-.all-top-docs::-webkit-scrollbar{
+.all-top-docs::-webkit-scrollbar {
   display: none;
 }
 .view-all-doc {
@@ -234,15 +229,12 @@
 }
 .all-doctors {
   display: flex;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   width: 38.194vmax;
   height: 15.988vmax;
   border-radius: 13px;
   background: #fff;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-
-
-  
 }
 .doc-details {
   display: flex;
@@ -274,60 +266,101 @@
   line-height: normal;
   /* overflow-y: scroll; */
 }
-.form-parent {
-  flex: 1;
-  padding: 0vmax 0vmin;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  
-
-
-
-  /* background-color: aliceblue; */
-  /* color: rgb(198, 232, 255); */
-}
-.form{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 35vmax;
-  padding: 2vmin;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-
-
-  gap: 2vmin;
-}
-.err{
-  color: red;
-  font-size: 1.5vmin;
-  margin-top: 0.5qvmin;
-}
-.patient-login-container{
+.patient-login-container {
   display: flex;
   flex-direction: column;
   background: #fff;
   min-height: 100vh;
   width: 100%;
-
 }
-.patient-login-body{
+.patient-login-body {
   flex: 1;
   display: flex;
- 
 }
-.fff{
+.form-parent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* background-color: aliceblue; */
+  /* color: rgb(198, 232, 255); */
+}
+.doc-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 45vmax;
+  /* border: 1px solid gray; */
+  border-radius: 23px;
+  box-shadow: 0px 4px 43.9px rgba(0, 0, 0, 0.25);
+  /* height: 40vmax; */
+  overflow: hidden;
+}
+
+.curvy {
+  background-color: #1479ff;
+  background-color: #3182ce;
+  width: 100%;
+  height: 7vmax;
+  border-radius: 50% 50% 50% 50% / 0% 0% 80% 80%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex-direction: column;
+  flex-shrink: 0;
 }
-.dd{
-  position: relative;
+.get-started {
+  font-family: "Franklin Gothic Medium";
+  font-weight: 400;
+  color: #fff;
+  font-size: 2.083vmax;
+  text-align: center;
 }
-.tttt{
-  position: absolute;
-  top: 50%;
+.doc-signup {
+  font-family: "Franklin Gothic Medium";
+  font-size: 0.764vmax;
+  text-align: center;
+  color: #fff;
+  font-weight: 400;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  width: 100%;
+  padding: 2vmax 4.5vmax;
+  /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25); */
+
+  gap: 2vmin;
+}
+.doc-form-login{
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2vmax;
+  padding: 5vmin 4.5vmax;
+
+}
+.err {
+  color: red;
+  font-size: 1.5vmin;
+  margin-top: 0.5qvmin;
+}
+
+.custom-upload {
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#cv{
+  display: none;
 }

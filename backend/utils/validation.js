@@ -39,13 +39,14 @@ exports.appointmentValidation = Joi.object({
 
 exports.doctorValidation = Joi.object({
   name: Joi.string().required(),
-  username: Joi.string().required(),
   password: Joi.string()
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),
   degree: Joi.string().required(),
   hospital: Joi.string().required(),
   speciality: Joi.string().required(),
+  bio: Joi.string().required(),
+  image: Joi.string().required(),
   contact: Joi.object({
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
@@ -59,6 +60,9 @@ exports.hospitalValidation = Joi.object({
   password: Joi.string()
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),
+  location: Joi.string().required(),
+  image: Joi.string().required(),
+  specialization:Joi.string().required(),
   contact: Joi.object({
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })

@@ -1,5 +1,13 @@
-import { Box, HStack, Image } from "@chakra-ui/react";
-import React from "react";
+import {
+  Box,
+  HStack,
+  IconButton,
+  Image,
+  InputGroup,
+  InputRightElement,
+  useToast,
+} from "@chakra-ui/react";
+import React, { useContext } from "react";
 import patientlogin from "../assets/images/patient-login.jpg";
 
 import { useForm } from "react-hook-form";
@@ -9,8 +17,16 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { SideNavbar } from "./SideNavbar";
 import TopNavbar from "./TopNavbar";
+import { setCookie } from "../utils/cookie";
+import { loginCheck, typeCheck } from "../utils/loginCheck";
+import { AppContext } from "./Context";
+import { FaEyeSlash } from "react-icons/fa";
+import { FaRegEye } from "react-icons/fa";
 
 export default function DoctorLogin() {
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
+  const { setLogin, setUserType } = useContext(AppContext);
   const navigate = useNavigate();
   const {
     register,
@@ -20,81 +36,161 @@ export default function DoctorLogin() {
     formState: { errors },
   } = useForm();
   // console.log(watch())
+  const toast = useToast();
+  const toastIdRef = React.useRef();
   const FormSubmitHandler = (data) => {
-    axios
-      .post("http://localhost:6969/doctors/signup", data)
-      .then((res) => {
-        console.log(res.data)
-        console.log("ADDED");
-        navigate("");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    toastIdRef.current = toast({
+      title: `Signing Up`,
+      status: "loading",
+      isClosable: false,
+    });
+    setTimeout(() => {
+      axios
+        .post("http://localhost:6969/doctors/signin", data)
+        .then((res) => {
+          setCookie("type", "Doctor", 10);
+          setCookie("auth-token", res.data, 10);
+          setCookie("email", data.email, 10);
+          setLogin(loginCheck());
+          setUserType(typeCheck());
+          toast.update(toastIdRef.current, {
+            title: `Signed Up`,
+            status: "success",
+            isClosable: false,
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            if (err.response.status == 404) {
+              toast.update(toastIdRef.current, {
+                title: `Email not found`,
+                status: "error",
+                isClosable: false,
+              });
+            } else if (err.response.status == 401) {
+              toast.update(toastIdRef.current, {
+                title: `Wrong Password`,
+                status: "error",
+                isClosable: false,
+              });
+            } else {
+              toast.update(toastIdRef.current, {
+                title: `Server Error! Contact Admin`,
+                status: "error",
+                isClosable: false,
+              });
+            }
+          } else {
+            toast.update(toastIdRef.current, {
+              title: `Server Error! Contact Admin`,
+              status: "error",
+              isClosable: false,
+            });
+          }
+        });
+    }, 1200);
   };
   return (
     <div className="patient-login-container">
       <TopNavbar />
       <div className="patient-login-body">
         <SideNavbar />
-        <Box flex={1}>
-
+        <Box flex={1} padding={"5vmax"}>
           <div className="form-parent">
-            <form className="form" onSubmit={handleSubmit(FormSubmitHandler)}>
-              <Text as="b" fontSize="2.3vmax">
-                Welcome back
-              </Text>
-              <Text as="i" fontSize="1vmax">
-                Enter the following details!
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
-                  Username
-                </FormLabel>
-                <Input
-                  type="text"
-                  borderColor="black"
-                  {...register("username", {
-                    required: "Username is required",
-                  })}
-                />
-                <p className="err">{errors.username?.message}</p>
-              </FormControl>
-              <FormControl>
-                <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
-                  Password
-                </FormLabel>
-                <Input
-                  type="password"
-                  borderColor="black"
-                  {...register("password", {
-                    required: "Password Required",
-                    minLength: {
-                      value: 8,
-                      message: "Minimum 8 characters required",
-                    },
-                    pattern: {
-                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
-                      message:
-                        "Password Not Valid (Use Special Characters & Numbers)",
-                    },
-                  })}
-                />
-                <p className="err">{errors.password?.message}</p>
-              </FormControl>
-              
-               
-              <Button type="submit" colorScheme="blue">
-                Submit
-              </Button>
-            </form>
+            <div className="doc-form-container">
+              <div className="curvy">
+                <div className="get-started">Welcome back</div>
+                <div className="doc-signup">Doctor Login</div>
+              </div>
+              <form
+                className="doc-form-login"
+                onSubmit={handleSubmit(FormSubmitHandler)}
+              >
+                <FormControl>
+                  <FormLabel
+                    fontFamily={"Franklin Gothic Medium"}
+                    color={"#7F7F7F"}
+                    fontSize="1vmax"
+                    fontWeight="400"
+                  >
+                    Email
+                  </FormLabel>
+                  <Input
+                    placeholder="Enter email"
+                    type="email"
+                    borderColor="black"
+                    {...register("email", {
+                      required: "Email is required",
+                    })}
+                  />
+                  <p className="err">{errors.email?.message}</p>
+                </FormControl>
+                <FormControl>
+                  <FormLabel
+                    fontFamily={"Franklin Gothic Medium"}
+                    color={"#7F7F7F"}
+                    fontSize="1vmax"
+                    fontWeight="400"
+                  >
+                    Password
+                  </FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={show ? "text" : "password"}
+                      borderColor="black"
+                      placeholder="Enter password"
+                      {...register("password", {
+                        required: "Password Required",
+                        minLength: {
+                          value: 8,
+                          message: "Minimum 8 characters required",
+                        },
+                        pattern: {
+                          value:
+                            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                          message:
+                            "Password Not Valid (Use Special Characters & Numbers)",
+                        },
+                      })}
+                    />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        background={"transparent"}
+                        as={IconButton}
+                        icon={show ? <FaRegEye /> : <FaEyeSlash />}
+                        size="sm"
+                        onClick={handleClick}
+                      >
+                        {show ? "Hide" : "Show"}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                  <p className="err">{errors.password?.message}</p>
+                </FormControl>
+                <HStack>
+                  <Button variant={"link"} colorScheme="blue">
+                    Forgot Your Password?
+                  </Button>
+                </HStack>
+                <HStack justifyContent={"center"} gap={"3vmax"}>
+                  <Button type="submit" colorScheme="blue">
+                    Submit
+                  </Button>
+                  <Link to={"/doctor/signup"}>
+                    <Button variant={"outline"} colorScheme="blue">
+                      New Here?
+                    </Button>
+                  </Link>
+                </HStack>
+              </form>
+            </div>
           </div>
-        <Box>
-         <Link to={"/doctor/signup"}> <Text decoration={"underline"} cursor={"pointer"} align="center">Not registered yet? Sign up</Text></Link>
-        </Box>
         </Box>
       </div>
     </div>
-
   );
 }
