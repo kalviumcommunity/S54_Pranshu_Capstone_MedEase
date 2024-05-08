@@ -1,4 +1,4 @@
-import { Box, HStack, Image, InputGroup, InputRightElement, useToast } from "@chakra-ui/react";
+import { Box, HStack, IconButton, Image, InputGroup, InputRightElement, useToast } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import patientlogin from "../assets/images/patient-login.jpg";
 
@@ -12,6 +12,8 @@ import TopNavbar from "./TopNavbar";
 import { setCookie } from "../utils/cookie";
 import { loginCheck, typeCheck } from "../utils/loginCheck";
 import { AppContext } from "./Context";
+import { FaEyeSlash } from "react-icons/fa";
+import { FaRegEye } from "react-icons/fa";
 
 export default function PatientLogin() {
   const [show, setShow] = React.useState(false);
@@ -88,35 +90,46 @@ export default function PatientLogin() {
   };
   return (
     <div className="patient-login-container">
-      <TopNavbar />
-      <div className="patient-login-body">
-        <SideNavbar />
-        <Box flex={1}>
-
-          <div className="form-parent">
-            <form className="form" onSubmit={handleSubmit(FormSubmitHandler)}>
-              <Text as="b" fontSize="2.3vmax">
-                Welcome back
-              </Text>
-              <Text as="i" fontSize="1vmax">
-                Enter the following details!
-              </Text>
+    <TopNavbar />
+    <div className="patient-login-body">
+      <SideNavbar />
+      <Box flex={1} padding={"5vmax"}>
+        <div className="form-parent">
+          <div className="doc-form-container">
+            <div className="curvy">
+              <div className="get-started">Welcome back</div>
+              <div className="doc-signup">Patient Login</div>
+            </div>
+            <form
+              className="doc-form-login"
+              onSubmit={handleSubmit(FormSubmitHandler)}
+            >
               <FormControl>
-                <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
+                <FormLabel
+                  fontFamily={"Franklin Gothic Medium"}
+                  color={"#7F7F7F"}
+                  fontSize="1vmax"
+                  fontWeight="400"
+                >
                   Username
                 </FormLabel>
                 <Input
-                placeholder="Enter username"
+                  placeholder="Enter username"
                   type="text"
                   borderColor="black"
                   {...register("username", {
                     required: "Username is required",
                   })}
                 />
-                <p className="err">{errors.user?.message}</p>
+                <p className="err">{errors.username?.message}</p>
               </FormControl>
               <FormControl>
-                <FormLabel fontSize="1.2vmax" as="i" fontWeight="550">
+                <FormLabel
+                  fontFamily={"Franklin Gothic Medium"}
+                  color={"#7F7F7F"}
+                  fontSize="1vmax"
+                  fontWeight="400"
+                >
                   Password
                 </FormLabel>
                 <InputGroup>
@@ -131,31 +144,47 @@ export default function PatientLogin() {
                         message: "Minimum 8 characters required",
                       },
                       pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+                        value:
+                          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
                         message:
                           "Password Not Valid (Use Special Characters & Numbers)",
                       },
                     })}
                   />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    <Button
+                      background={"transparent"}
+                      as={IconButton}
+                      icon={show ? <FaRegEye /> : <FaEyeSlash />}
+                      size="sm"
+                      onClick={handleClick}
+                    >
                       {show ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
                 <p className="err">{errors.password?.message}</p>
               </FormControl>
-              <Button type="submit" colorScheme="blue">
-                Submit
-              </Button>
+              <HStack>
+
+              <Button variant={"link"} colorScheme="blue">Forgot Your Password?</Button>
+              </HStack>
+              <HStack justifyContent={"center"} gap={"3vmax"}>
+                <Button type="submit" colorScheme="blue">
+                  Submit
+                </Button>
+                <Link to={"/patient/signup"}>
+                  <Button variant={"outline"} colorScheme="blue">
+                    New Here?
+                  </Button>
+                </Link>
+              </HStack>
             </form>
           </div>
-        <Box>
-         <Link to={"/patient/signup"}> <Text decoration={"underline"} cursor={"pointer"} align="center">Not registered yet? Sign up</Text></Link>
-        </Box>
-        </Box>
-      </div>
+        </div>
+      </Box>
     </div>
+  </div>
 
   );
 }

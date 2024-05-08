@@ -40,7 +40,7 @@ patientRouter.get(
     let result = await User.find({ username: username });
 
     if (result.length == 0) {
-      res.status(404).json("User Not found!");
+      throw new ExpressError(404,"User Not found!")
     }
     res.send(result[0]);
   })

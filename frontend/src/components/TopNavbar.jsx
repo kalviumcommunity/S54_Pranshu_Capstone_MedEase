@@ -63,7 +63,7 @@ const TopNavbar = () => {
     }
     if (userType == "Doctor") {
       axios
-        .get(`http://localhost:6969/doctors/${username}`)
+        .get(`http://localhost:6969/doctors/${hosEmail}`)
         .then((res) => {
           setDoctor(res.data);
         })

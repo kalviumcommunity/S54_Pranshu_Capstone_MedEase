@@ -41,7 +41,7 @@ hospitalRouter.get("/:email",wrapAsync(async(req,res)=>{
   let {email} = req.params;
   let result = await Hospital.find({"contact.email":email})
   if(result.length == 0){
-    res.status(404).json("Hospital Not found!");
+    throw new ExpressError(404,"Hospital Not found!")
   }
   res.send(result[0])
 }))

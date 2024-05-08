@@ -39,7 +39,6 @@ exports.appointmentValidation = Joi.object({
 
 exports.doctorValidation = Joi.object({
   name: Joi.string().required(),
-  username: Joi.string().required(),
   password: Joi.string()
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),

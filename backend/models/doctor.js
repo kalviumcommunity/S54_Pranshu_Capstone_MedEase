@@ -3,7 +3,6 @@ const formatDate = require("../utils/formatDate");
 
 const doctorSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  username: { type: String, required: true },
   password: { type: String, required: true },
   degree: { type: String, required: true },
   hospital: { type: mongoose.Schema.Types.ObjectId,ref:"Hospital", required: true },
