@@ -54,6 +54,7 @@ patientRouter.post(
     let newUserData = new User({
       name: req.body.name,
       username: req.body.username,
+      image:req.body.image,
       password: hashedPassword,
       contact: req.body.contact,
     });

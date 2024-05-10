@@ -9,7 +9,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import patientlogin from "../assets/images/patient-login.jpg";
 import {
   getStorage,
@@ -32,22 +32,104 @@ import { FaCameraRetro } from "react-icons/fa";
 import { LuCamera } from "react-icons/lu";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
+import app from "../firebase";
 
 export default function DoctorSignup() {
+  const inputRef = useRef(null);
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   const navigate = useNavigate();
   const [hospital, seHospitals] = useState([]);
+  const [img, setImg] = useState(undefined);
+  const [imgPer, setImgPer] = useState(0);
+  const [input, setInput] = useState({});
+  const [imageError, setImageError] = useState("");
   const {
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
   // console.log(watch())
   const { setLogin, setUserType } = useContext(AppContext);
 
+  const handleClickUpload = () => {
+    // Trigger click event on hidden file input
+    if(inputRef.current){
+
+      inputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e) => {
+    // Set selected image file
+    setImg(e.target.files[0]);
+  };
+  
+  useEffect(() => {
+    img && uploadFile(img, "imgUrl");
+  }, [img]);
+
+  const uploadFile = (file, fileType) => {
+    const storage = getStorage(app);
+
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, "images/" + fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImgPer(Math.round(progress));
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            break;
+          case "storage/canceled":
+            // User canceled the upload
+            break;
+
+          // ...
+
+          case "storage/unknown":
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          // console.log("File available at", downloadURL);
+          // setInput((prev) => {
+          //   return {
+          //     ...prev,
+          //     [fileType]: downloadURL,
+          //   };
+          // });
+          setValue("image", downloadURL);
+          setImageError("");
+        });
+      }
+    );
+  };
   useEffect(() => {
     axios
       .get("http://localhost:6969/hospitals")
@@ -61,6 +143,13 @@ export default function DoctorSignup() {
   const toast = useToast();
   const toastIdRef = React.useRef();
   const FormSubmitHandler = (data) => {
+    // data.image = input.imgUrl;
+    if (!data.image) {
+      setImageError("Image is required");
+      return;
+    }
+
+
     toastIdRef.current = toast({
       title: `Signing Up`,
       status: "loading",
@@ -347,32 +436,26 @@ export default function DoctorSignup() {
                       >
                         Profile photo
                       </FormLabel>
-                      {/* <Input
-                    placeholder="Enter your profle photo"
-                    type=""
-                    borderColor="black"
-                    {...register("image", {
-                      required: "Photo is required",
-                    })}
-                    /> */}
-                      {/* <p className="err">{errors.image?.message}</p> */}
+                      <HStack>
                       <Button
                         leftIcon={<FaCameraRetro />}
                         variant="outline"
                         colorScheme="blue"
+                        onClick={handleClickUpload}
                       >
                         Upload
-
                       </Button>
-                      {/* <Input
+                      <Input
+                      ref={inputRef}
                         type="file"
                         accept="image/*"
                         id="img"
-                        onChange={(e) => {
-                          setImg((prev) => e.target.files[0]);
-                          console.log(img);
-                        }}
-                      /> */}
+                        onChange={handleFileChange}
+                      />
+                      {imgPer > 0 && <span className="uploading">Uploading:{ imgPer} %</span>}
+                      </HStack>
+                      {imageError && <p className="err">{imageError}</p>}
+
                     </FormControl>
                   </HStack>
                   <HStack gap={"3vmax"}>
