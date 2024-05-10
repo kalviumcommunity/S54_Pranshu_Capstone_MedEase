@@ -25,6 +25,7 @@ import { SideNavbar } from "./SideNavbar";
 import { Link, useNavigate } from "react-router-dom";
 import TopNavbar from "./TopNavbar";
 
+
 const Home = () => {
   const navigate = useNavigate();
   return (

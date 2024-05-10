@@ -3,6 +3,7 @@ const Joi = require("joi");
 exports.userValidation = Joi.object({
   name: Joi.string().required(),
   username: Joi.string().required(),
+  image: Joi.string(),
   password: Joi.string()
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),
