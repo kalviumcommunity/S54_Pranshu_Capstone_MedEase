@@ -24,7 +24,7 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import { SideNavbar } from "./SideNavbar";
 import { Link, useNavigate } from "react-router-dom";
 import TopNavbar from "./TopNavbar";
-import { firebaseConfig } from "../firebase";
+
 
 const Home = () => {
   const navigate = useNavigate();
