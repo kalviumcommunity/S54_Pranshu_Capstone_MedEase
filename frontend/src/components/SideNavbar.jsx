@@ -17,6 +17,8 @@ export const SideNavbar = () => {
             <Button
               className="dash-btn"
               as={IconButton}
+              size={["xs", "sm", "md"]}
+
               icon={
                 <RxDashboard
                   color="white"
