@@ -25,7 +25,7 @@ const validateUser = (req, res, next) => {
 doctorRouter.get(
   "/",
   wrapAsync(async (req, res) => {
-    let data = await Doctor.find();
+    let data = await Doctor.find().populate('hospital');
     if (data.length != 0) {
       res.send(data);
     } else {
