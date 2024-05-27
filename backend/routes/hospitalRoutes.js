@@ -51,7 +51,7 @@ hospitalRouter.post(
   wrapAsync(async (req, res) => {
     let { password,specialization } = req.body;
     let hashedPassword = passwordHash.generate(password);
-    let specializationArray = specialization.split(",")
+    let specializationArray = specialization.split(/[\s,]+/).filter(Boolean);
 
     let newUserData = new Hospital({
       name: req.body.name,

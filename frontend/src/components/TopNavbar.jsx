@@ -22,15 +22,15 @@ const TopNavbar = () => {
   const [patient, setPatient] = useState({});
   const [doctor, setDoctor] = useState({});
   const [hospital, setHospital] = useState({});
-  const toast = useToast()
+  const toast = useToast();
 
   const logout = () => {
     toast({
-      title: 'Logged out',
-      status: 'info',
+      title: "Logged out",
+      status: "info",
       duration: 9000,
       isClosable: true,
-    })
+    });
     deleteCookie("auth-token");
     deleteCookie("type");
     let username = getCookie("username");
@@ -43,7 +43,6 @@ const TopNavbar = () => {
     }
     setTimeout(() => {
       location.reload();
-      
     }, 1500);
     setLogin(loginCheck());
   };
@@ -53,7 +52,7 @@ const TopNavbar = () => {
   useEffect(() => {
     if (userType == "Patient") {
       axios
-        .get(`http://localhost:6969/patients/${username}`)
+        .get(`https://medease-ez-backend.vercel.app/patients/${username}`)
         .then((res) => {
           setPatient(res.data);
         })
@@ -63,7 +62,7 @@ const TopNavbar = () => {
     }
     if (userType == "Doctor") {
       axios
-        .get(`http://localhost:6969/doctors/${hosEmail}`)
+        .get(`https://medease-ez-backend.vercel.app/doctors/${hosEmail}`)
         .then((res) => {
           setDoctor(res.data);
         })
@@ -73,7 +72,7 @@ const TopNavbar = () => {
     }
     if (userType == "Hospital") {
       axios
-        .get(`http://localhost:6969/hospitals/${hosEmail}`)
+        .get(`https://medease-ez-backend.vercel.app/hospitals/${hosEmail}`)
         .then((res) => {
           setHospital(res.data);
         })
@@ -117,7 +116,19 @@ const TopNavbar = () => {
           <MenuButton>
             <Wrap>
               <WrapItem>
-                <Avatar name={hospital.name ? hospital.name : doctor.name ? doctor.name : patient.name ? patient.name : ""} src="" />
+                <Avatar
+                  size={["sm","sm","md"]}
+                  name={
+                    hospital.name
+                      ? hospital.name
+                      : doctor.name
+                      ? doctor.name
+                      : patient.name
+                      ? patient.name
+                      : ""
+                  }
+                  src=""
+                />
               </WrapItem>
             </Wrap>
           </MenuButton>
