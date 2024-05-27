@@ -7,6 +7,11 @@ import {
   InputRightElement,
   Select,
   useToast,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  VStack,
+  Stack,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import patientlogin from "../assets/images/patient-login.jpg";
@@ -31,7 +36,6 @@ import { FaEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import app from "../firebase";
 
-
 export default function HospitalSignup() {
   const inputRef = useRef(null);
   const [show, setShow] = React.useState(false);
@@ -43,6 +47,7 @@ export default function HospitalSignup() {
   const [imgPer, setImgPer] = useState(0);
   const [input, setInput] = useState({});
   const [imageError, setImageError] = useState("");
+  const [specializations, setSpecializations] = useState([]);
   const {
     register,
     handleSubmit,
@@ -51,29 +56,23 @@ export default function HospitalSignup() {
     setValue,
     formState: { errors },
   } = useForm();
-  // console.log(watch())
-
 
   const handleClickUpload = () => {
-    // Trigger click event on hidden file input
-    if(inputRef.current){
-
+    if (inputRef.current) {
       inputRef.current.click();
     }
   };
 
   const handleFileChange = (e) => {
-    // Set selected image file
     setImg(e.target.files[0]);
   };
-  
+
   useEffect(() => {
     img && uploadFile(img, "imgUrl");
   }, [img]);
 
   const uploadFile = (file, fileType) => {
     const storage = getStorage(app);
-
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, "images/" + fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -81,48 +80,28 @@ export default function HospitalSignup() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImgPer(Math.round(progress));
-        console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
             break;
           case "running":
-            console.log("Upload is running");
             break;
         }
       },
       (error) => {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
         switch (error.code) {
           case "storage/unauthorized":
-            // User doesn't have permission to access the object
             break;
           case "storage/canceled":
-            // User canceled the upload
             break;
-
-          // ...
-
           case "storage/unknown":
-            // Unknown error occurred, inspect error.serverResponse
             break;
         }
       },
       () => {
-        // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          // console.log("File available at", downloadURL);
-          // setInput((prev) => {
-          //   return {
-          //     ...prev,
-          //     [fileType]: downloadURL,
-          //   };
-          // });
           setValue("image", downloadURL);
           setImageError("");
         });
@@ -133,7 +112,6 @@ export default function HospitalSignup() {
   const toast = useToast();
   const toastIdRef = React.useRef();
   const FormSubmitHandler = (data) => {
-
     if (!data.image) {
       setImageError("Image is required");
       return;
@@ -146,7 +124,7 @@ export default function HospitalSignup() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:6969/hospitals/signup", data)
+        .post("https://medease-ez-backend.vercel.app/hospitals/signup", data)
         .then((res) => {
           setCookie("type", "Hospital", 10);
           setCookie("auth-token", res.data, 10);
@@ -163,9 +141,8 @@ export default function HospitalSignup() {
           }, 1500);
         })
         .catch((err) => {
-          console.log(err);
           if (err.response) {
-            if (err.response.status == 400) {
+            if (err.response.status === 400) {
               toast.update(toastIdRef.current, {
                 title: `Hospital with this email Exists`,
                 status: "error",
@@ -188,15 +165,21 @@ export default function HospitalSignup() {
         });
     }, 1200);
   };
+
+  const handleSpecializationChange = (e) => {
+    const value = e.target.value;
+    const specializationsArray = value.split(/[\s,]+/).filter(Boolean);
+    setSpecializations(specializationsArray);
+  };
+  console.log(specializations);
   return (
     <div className="patient-login-container">
       <TopNavbar />
       <div className="patient-login-body">
         <SideNavbar />
-        <Box flex={1}>
+        <Box flex={1} width={"100%"} padding={["2vmax", "5vmax", "5vmax", "0"]}>
           <div className="form-parent">
             <div className="doc-form-container">
-              {/* <div className="curvy-box"></div> */}
               <div className="curvy">
                 <div className="get-started">Get Started</div>
                 <div className="doc-signup">Hospital SignUp</div>
@@ -216,6 +199,7 @@ export default function HospitalSignup() {
                       Name
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter hospital's name"
                       type="text"
                       borderColor="black"
@@ -235,6 +219,7 @@ export default function HospitalSignup() {
                       Email
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter email"
                       type="email"
                       borderColor="black"
@@ -255,7 +240,7 @@ export default function HospitalSignup() {
                     >
                       Password
                     </FormLabel>
-                    <InputGroup>
+                    <InputGroup size={["sm", "sm", "md"]}>
                       <Input
                         type={show ? "text" : "password"}
                         borderColor="black"
@@ -274,16 +259,21 @@ export default function HospitalSignup() {
                           },
                         })}
                       />
-                      <InputRightElement width="3rem">
+                      <InputRightElement
+                        size={["xs", "sm", "md"]}
+                        width={"3rem"}
+                        display={"flex"}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                        // height={{ base: "4vmax", md: "3vmax" }}
+                      >
                         <Button
                           background={"transparent"}
                           as={IconButton}
                           icon={show ? <FaRegEye /> : <FaEyeSlash />}
-                          size="sm"
+                          size={["xs", "xs", "md"]}
                           onClick={handleClick}
-                        >
-                          {/* {show ? "Hide" : "Show"} */}
-                        </Button>
+                        />
                       </InputRightElement>
                     </InputGroup>
                     <p className="err">{errors.password?.message}</p>
@@ -298,6 +288,7 @@ export default function HospitalSignup() {
                       Phone no.
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter phone no."
                       type="number"
                       borderColor="black"
@@ -326,6 +317,7 @@ export default function HospitalSignup() {
                     Location
                   </FormLabel>
                   <Input
+                    size={["sm", "sm", "md"]}
                     placeholder="for ex:- Ansari Nagar - New Delhi"
                     type="text"
                     borderColor="black"
@@ -335,31 +327,55 @@ export default function HospitalSignup() {
                   />
                   <p className="err">{errors.location?.message}</p>
                 </FormControl>
-                <FormControl>
-                  <FormLabel
-                    fontFamily={"Franklin Gothic Medium"}
-                    color={"#7F7F7F"}
-                    fontSize="1vmax"
-                    fontWeight="400"
-                  >
-                    Specializations
-                  </FormLabel>
-                  <Input
-                    placeholder="for ex:- Dermatology , Ophthalmology , Cardiology"
-                    type="text"
-                    borderColor="black"
-                    {...register("specialization", {
-                      required: "Specialization is required",
-                    })}
-                  />
-                  <p className="err">{errors.specialization?.message}</p>
-                </FormControl>
+                <Stack spacing={4}>
+                  <FormControl>
+                    <FormLabel
+                      fontFamily={"Franklin Gothic Medium"}
+                      color={"#7F7F7F"}
+                      fontSize="1vmax"
+                      fontWeight="400"
+                    >
+                      Specializations
+                    </FormLabel>
+                    <Input
+                      size={["sm", "sm", "md"]}
+                      placeholder="for ex:- Dermatology , Ophthalmology , Cardiology"
+                      type="text"
+                      borderColor="black"
+                      {...register("specialization", {
+                        required: "Specialization is required",
+                        onChange: handleSpecializationChange,
+                      })}
+                    />
+                    <p className="err">{errors.specialization?.message}</p>
+                  </FormControl>
+                  <HStack>
+                    {specializations.map((size, index) => (
+                      <Tag
+                        size="md"
+                        key={index}
+                        borderRadius="full"
+                        variant="solid"
+                        colorScheme="blue"
+                      >
+                        <TagLabel>{size}</TagLabel>
+                        <TagCloseButton
+                          onClick={() => {
+                            const updatedSpecializations =
+                              specializations.filter((item, i) => i !== index);
+                            setSpecializations(updatedSpecializations);
+                          }}
+                        />
+                      </Tag>
+                    ))}
+                  </HStack>
+                </Stack>
 
                 <HStack
                   justifyContent={"space-between"}
                   alignItems={"flex-end"}
                 >
-                 <HStack>
+                  <HStack>
                     <FormControl>
                       <FormLabel
                         fontFamily={"Franklin Gothic Medium"}
@@ -370,34 +386,44 @@ export default function HospitalSignup() {
                         Hospital image
                       </FormLabel>
                       <HStack>
-                      <Button
-                        leftIcon={<FaCameraRetro />}
-                        variant="outline"
-                        colorScheme="blue"
-                        onClick={handleClickUpload}
-                      >
-                        Upload
-                      </Button>
-                      <Input
-                      ref={inputRef}
-                        type="file"
-                        accept="image/*"
-                        id="img"
-                        onChange={handleFileChange}
-                      />
-                      {imgPer > 0 && <span className="uploading">Uploading:{ imgPer} %</span>}
+                        <Button
+                          size={["xs", "xs", "sm", "md"]}
+                          leftIcon={<FaCameraRetro />}
+                          variant="outline"
+                          colorScheme="blue"
+                          onClick={handleClickUpload}
+                        >
+                          Upload
+                        </Button>
+                        <Input
+                          ref={inputRef}
+                          type="file"
+                          accept="image/*"
+                          id="img"
+                          onChange={handleFileChange}
+                        />
+                        {imgPer > 0 && (
+                          <span className="uploading">{imgPer} %</span>
+                        )}
                       </HStack>
                       {imageError && <p className="err">{imageError}</p>}
-
                     </FormControl>
                   </HStack>
-                  <HStack gap={"3vmax"}>
+                  <HStack gap={["1vmax", "3vmax"]}>
                     <Link to={"/hospital/login"}>
-                      <Button variant="link" colorScheme="blue">
+                      <Button
+                        size={["xs", "xs", "sm", "md"]}
+                        variant="link"
+                        colorScheme="blue"
+                      >
                         Already Registered?
                       </Button>
                     </Link>
-                    <Button type="submit" colorScheme="blue">
+                    <Button
+                      size={["xs", "xs", "sm", "md"]}
+                      type="submit"
+                      colorScheme="blue"
+                    >
                       Submit
                     </Button>
                   </HStack>

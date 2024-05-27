@@ -57,8 +57,7 @@ export default function DoctorSignup() {
 
   const handleClickUpload = () => {
     // Trigger click event on hidden file input
-    if(inputRef.current){
-
+    if (inputRef.current) {
       inputRef.current.click();
     }
   };
@@ -67,7 +66,7 @@ export default function DoctorSignup() {
     // Set selected image file
     setImg(e.target.files[0]);
   };
-  
+
   useEffect(() => {
     img && uploadFile(img, "imgUrl");
   }, [img]);
@@ -132,7 +131,7 @@ export default function DoctorSignup() {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:6969/hospitals")
+      .get("https://medease-ez-backend.vercel.app/hospitals")
       .then((res) => {
         seHospitals(res.data);
       })
@@ -149,7 +148,6 @@ export default function DoctorSignup() {
       return;
     }
 
-
     toastIdRef.current = toast({
       title: `Signing Up`,
       status: "loading",
@@ -158,7 +156,7 @@ export default function DoctorSignup() {
 
     setTimeout(() => {
       axios
-        .post("http://localhost:6969/doctors/signup", data)
+        .post("https://medease-ez-backend.vercel.app/doctors/signup", data)
         .then((res) => {
           setCookie("type", "Doctor", 10);
           setCookie("auth-token", res.data, 10);
@@ -211,7 +209,7 @@ export default function DoctorSignup() {
       <TopNavbar />
       <div className="patient-login-body">
         <SideNavbar />
-        <Box flex={1}>
+        <Box flex={1} width={"100%"} padding={["2vmax", "5vmax", "5vmax", "0"]}>
           <div className="form-parent">
             <div className="doc-form-container">
               {/* <div className="curvy-box"></div> */}
@@ -231,6 +229,7 @@ export default function DoctorSignup() {
                       Name
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter your full name"
                       type="text"
                       borderColor="black"
@@ -251,6 +250,7 @@ export default function DoctorSignup() {
                       Email
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter email"
                       type="email"
                       borderColor="black"
@@ -271,7 +271,7 @@ export default function DoctorSignup() {
                     >
                       Password
                     </FormLabel>
-                    <InputGroup>
+                    <InputGroup size={["sm", "sm", "md"]}>
                       <Input
                         type={show ? "text" : "password"}
                         borderColor="black"
@@ -290,7 +290,7 @@ export default function DoctorSignup() {
                           },
                         })}
                       />
-                      <InputRightElement width="3rem">
+                      <InputRightElement size={["sm", "sm", "md"]} width="3rem">
                         <Button
                           background={"transparent"}
                           as={IconButton}
@@ -314,6 +314,7 @@ export default function DoctorSignup() {
                       Phone no.
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter phone no."
                       type="number"
                       borderColor="black"
@@ -343,6 +344,7 @@ export default function DoctorSignup() {
                       Qualifications
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="for ex:- MBBS"
                       type="text"
                       borderColor="black"
@@ -363,6 +365,7 @@ export default function DoctorSignup() {
                     </FormLabel>
 
                     <Select
+                      size={["sm", "sm", "md"]}
                       placeholder="Select Hospital"
                       borderColor={"black"}
                       {...register("hospital", {
@@ -394,6 +397,7 @@ export default function DoctorSignup() {
                     Speciality
                   </FormLabel>
                   <Input
+                    size={["sm", "sm", "md"]}
                     placeholder="for ex:- surgeon"
                     type="text"
                     borderColor="black"
@@ -413,6 +417,7 @@ export default function DoctorSignup() {
                     Bio
                   </FormLabel>
                   <Textarea
+                    size={["sm", "sm", "md"]}
                     placeholder="Brief description of yourself"
                     type="text"
                     borderColor="black"
@@ -437,34 +442,51 @@ export default function DoctorSignup() {
                         Profile photo
                       </FormLabel>
                       <HStack>
-                      <Button
-                        leftIcon={<FaCameraRetro />}
-                        variant="outline"
-                        colorScheme="blue"
-                        onClick={handleClickUpload}
-                      >
-                        Upload
-                      </Button>
-                      <Input
-                      ref={inputRef}
-                        type="file"
-                        accept="image/*"
-                        id="img"
-                        onChange={handleFileChange}
-                      />
-                      {imgPer > 0 && <span className="uploading">Uploading:{ imgPer} %</span>}
+                        <Button
+                      size={["xs", "xs","sm" ,"md"]}
+
+
+                          leftIcon={<FaCameraRetro />}
+                          variant="outline"
+                          colorScheme="blue"
+                          onClick={handleClickUpload}
+                        >
+                          Upload
+                        </Button>
+                        <Input
+                          ref={inputRef}
+                          type="file"
+                          accept="image/*"
+                          id="img"
+                          onChange={handleFileChange}
+                        />
+                        {imgPer > 0 && (
+                          <span className="uploading">
+                            {imgPer} %
+                          </span>
+                        )}
                       </HStack>
                       {imageError && <p className="err">{imageError}</p>}
-
                     </FormControl>
                   </HStack>
                   <HStack gap={"3vmax"}>
                     <Link to={"/doctor/login"}>
-                      <Button variant="link" colorScheme="blue">
+                      <Button
+                      size={["xs", "xs","sm" ,"md"]}
+
+
+                        variant="link"
+                        colorScheme="blue"
+                      >
                         Already Registered?
                       </Button>
                     </Link>
-                    <Button type="submit" colorScheme="blue">
+                    <Button
+                      size={["xs", "xs","sm" ,"md"]}
+
+                      type="submit"
+                      colorScheme="blue"
+                    >
                       Submit
                     </Button>
                   </HStack>

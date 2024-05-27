@@ -46,7 +46,7 @@ export default function DoctorLogin() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:6969/doctors/signin", data)
+        .post("https://medease-ez-backend.vercel.app/doctors/signin", data)
         .then((res) => {
           setCookie("type", "Doctor", 10);
           setCookie("auth-token", res.data, 10);
@@ -99,7 +99,11 @@ export default function DoctorLogin() {
       <TopNavbar />
       <div className="patient-login-body">
         <SideNavbar />
-        <Box flex={1} padding={"5vmax"}>
+        <Box
+          flex={1}
+          width={"100%"}
+          padding={["2vmax", "5vmax 8vmax", "5vmax 10vmax", "5vmax"]}
+        >
           <div className="form-parent">
             <div className="doc-form-container">
               <div className="curvy">
@@ -120,6 +124,7 @@ export default function DoctorLogin() {
                     Email
                   </FormLabel>
                   <Input
+                    size={["sm", "sm", "md"]}
                     placeholder="Enter email"
                     type="email"
                     borderColor="black"
@@ -140,6 +145,7 @@ export default function DoctorLogin() {
                   </FormLabel>
                   <InputGroup>
                     <Input
+                      size={["sm", "sm", "md"]}
                       type={show ? "text" : "password"}
                       borderColor="black"
                       placeholder="Enter password"
@@ -157,7 +163,13 @@ export default function DoctorLogin() {
                         },
                       })}
                     />
-                    <InputRightElement width="4.5rem">
+                    <InputRightElement
+                      size={["xs", "sm", "md"]}
+                      width={"3rem"}
+                      display={"flex"}
+                      alignItems={"flex-start"}
+                      justifyContent={"center"}
+                    >
                       <Button
                         background={"transparent"}
                         as={IconButton}
@@ -172,16 +184,28 @@ export default function DoctorLogin() {
                   <p className="err">{errors.password?.message}</p>
                 </FormControl>
                 <HStack>
-                  <Button variant={"link"} colorScheme="blue">
+                  <Button
+                    size={["sm", "sm", "md"]}
+                    variant={"link"}
+                    colorScheme="blue"
+                  >
                     Forgot Your Password?
                   </Button>
                 </HStack>
                 <HStack justifyContent={"center"} gap={"3vmax"}>
-                  <Button type="submit" colorScheme="blue">
+                  <Button
+                    size={["sm", "sm", "md"]}
+                    type="submit"
+                    colorScheme="blue"
+                  >
                     Submit
                   </Button>
                   <Link to={"/doctor/signup"}>
-                    <Button variant={"outline"} colorScheme="blue">
+                    <Button
+                      size={["sm", "sm", "md"]}
+                      variant={"outline"}
+                      colorScheme="blue"
+                    >
                       New Here?
                     </Button>
                   </Link>

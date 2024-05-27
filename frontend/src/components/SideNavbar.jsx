@@ -35,6 +35,7 @@ export const SideNavbar = () => {
               backgroundColor={"#E9E9E9"}
               className="calender-btn"
               as={IconButton}
+              size={["xs", "sm", "md"]}
               icon={
                 <SlCalender
                   color="#1479FF"
@@ -50,6 +51,7 @@ export const SideNavbar = () => {
               backgroundColor={"#E9E9E9"}
               className="history-btn"
               as={IconButton}
+              size={["xs", "sm", "md"]}
               icon={
                 <BsClockHistory
                   color="#1479FF"
@@ -65,6 +67,8 @@ export const SideNavbar = () => {
               backgroundColor={"#E9E9E9"}
               className="profile-btn"
               as={IconButton}
+              size={["xs", "sm", "md"]}
+
               icon={
                 <FaRegUser
                   color="#1479FF"

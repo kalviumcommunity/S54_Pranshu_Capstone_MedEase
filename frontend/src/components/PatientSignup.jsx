@@ -134,7 +134,7 @@ export default function PatientLogin() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:6969/patients/signup", data)
+        .post("https://medease-ez-backend.vercel.app/patients/signup", data)
         .then((res) => {
           setCookie("type", "Patient", 10);
           setCookie("auth-token", res.data, 10);
@@ -181,7 +181,11 @@ export default function PatientLogin() {
       <TopNavbar />
       <div className="patient-login-body">
         <SideNavbar />
-        <Box flex={1} padding={"5vmax"}>
+        <Box
+          flex={1}
+          width={"100%"}
+          padding={["2vmax", "5vmax 8vmax", "5vmax 10vmax", "5vmax"]}
+        >
           <div className="form-parent">
             <div className="doc-form-container">
               <div className="curvy">
@@ -203,6 +207,7 @@ export default function PatientLogin() {
                       Name
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter your full name"
                       type="text"
                       borderColor="black"
@@ -222,6 +227,7 @@ export default function PatientLogin() {
                       Email
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter email"
                       type="email"
                       borderColor="black"
@@ -243,6 +249,7 @@ export default function PatientLogin() {
                       Username
                     </FormLabel>
                     <Input
+                      size={["sm", "sm", "md"]}
                       placeholder="Enter username"
                       type="text"
                       borderColor="black"
@@ -261,8 +268,9 @@ export default function PatientLogin() {
                     >
                       Password
                     </FormLabel>
-                    <InputGroup>
+                    <InputGroup size={["sm", "sm", "md"]}>
                       <Input
+                        size={["sm", "sm", "md"]}
                         type={show ? "text" : "password"}
                         borderColor="black"
                         placeholder="Enter password"
@@ -305,6 +313,7 @@ export default function PatientLogin() {
                     Phone no.
                   </FormLabel>
                   <Input
+                    size={["sm", "sm", "md"]}
                     placeholder="Enter phone no."
                     type="number"
                     borderColor="black"
@@ -339,6 +348,7 @@ export default function PatientLogin() {
                       </FormLabel>
                       <HStack>
                         <Button
+                          size={["xs", "xs", "sm", "md"]}
                           leftIcon={<FaCameraRetro />}
                           variant="outline"
                           colorScheme="blue"
@@ -354,20 +364,26 @@ export default function PatientLogin() {
                           onChange={handleFileChange}
                         />
                         {imgPer > 0 && (
-                          <span className="uploading">
-                            Uploading:{imgPer} %
-                          </span>
+                          <span className="uploading">{imgPer} %</span>
                         )}
                       </HStack>
                     </FormControl>
                   </HStack>
                   <HStack gap={"3vmax"}>
                     <Link to={"/patient/login"}>
-                      <Button variant="link" colorScheme="blue">
+                      <Button
+                        size={["xs", "xs", "sm", "md"]}
+                        variant="link"
+                        colorScheme="blue"
+                      >
                         Already Registered?
                       </Button>
                     </Link>
-                    <Button type="submit" colorScheme="blue">
+                    <Button
+                      size={["xs", "xs", "sm", "md"]}
+                      type="submit"
+                      colorScheme="blue"
+                    >
                       Submit
                     </Button>
                   </HStack>
