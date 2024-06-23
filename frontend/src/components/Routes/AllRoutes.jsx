@@ -10,6 +10,7 @@ import HospitalLogin from '../HospitalLogin';
 import PatientSignup from '../PatientSignup';
 import DoctorSignup from '../DoctorSignup';
 import HospitalSignup from '../HospitalSignup';
+import AllDoc from '../AllDoc';
 
 const AllRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AllRoutes = () => {
         <Route path='/doctor/login' element={<DoctorLogin/>} />
         <Route path='/hospital/signup' element={<HospitalSignup/>} />
         <Route path='/hospital/login' element={<HospitalLogin/>} />
+        <Route path='/alldoctors' element={<AllDoc/>} />
 
       </Routes>
     </div>
