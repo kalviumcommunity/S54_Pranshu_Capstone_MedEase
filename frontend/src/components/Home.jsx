@@ -131,6 +131,9 @@ const Home = () => {
                   // width={"10vmax"}
                   color={"#1479ff"}
                   fontSize={"0.972vmax"}
+                  onClick={()=>{
+                    navigate('/alldoctors')
+                  }}
                 >
                   View All Doctors
                 </Button>
